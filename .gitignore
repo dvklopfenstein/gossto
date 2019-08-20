@@ -1,3 +1,7 @@
+go-basic.obo
+goa_human.gaf
+*.gz
+*sm_output*
 Gossto_with_data.zip
 gene_association.goa_yeast
 gene_ontology_ext.obo

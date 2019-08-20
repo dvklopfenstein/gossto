@@ -1,11 +1,11 @@
 
-example:
+example: gene_association.goa_yeast
 	java -jar dist/Gossto.jar \
 	-calculationdata termwise \
 	-calculationtype ism \
 	-evidencecodes EXP,IDA,IPI,IMP,IGI,IEP,TAS,IC \
-	-goapath data/gene_association.goa_yeast \
-	-obopath data/gene_ontology_ext.obo \
+	-goapath gene_association.goa_yeast \
+	-obopath gene_ontology_ext.obo \
 	-hsm Resnik \
 	-hsmoutput demo_hsm_output \
 	-ismoutput demo_ism_output \
@@ -14,7 +14,7 @@ example:
 	-weightedJaccard false \
 	-terms all
 
-ex1:
+ex1: go-basic.obo
 	java -jar dist/Gossto.jar \
 	-calculationdata termwise \
 	-calculationtype ism \
@@ -36,6 +36,13 @@ dnld:
 	wget http://geneontology.org/gene-associations/goa_human.gaf.gz
 	gunzip goa_human.gaf.gz
 
+gene_association.goa_yeast:
+	wget https://www.paccanarolab.org/gosstoweb/files/Gossto_with_data.zip
+	unzip Gossto_with_data.zip
+
+go-basic.obo:
+	make dnld
+
 br:
 	git checkout -b DVK
 
@@ -54,3 +61,7 @@ jar:
 
 clean:
 	rm -rf Gossto_with_data.zip Gossto.jar readme.pdf
+	rm -rf *.gz
+
+clobber:
+	rm -rf gene_ontology_ext.obo gene_association.goa_yeast
