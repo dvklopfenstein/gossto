@@ -22,12 +22,30 @@ ex1: go-basic.obo
 	-goapath goa_human.gaf \
 	-obopath go-basic.obo \
 	-hsm Resnik \
-	-hsmoutput latest_hsm_output \
-	-ismoutput latest_ism_output \
+	-hsmoutput resnik_hsm_output \
+	-ismoutput resnik_ism_output \
 	-ontology all \
 	-relations is_a \
 	-weightedJaccard false \
 	-terms all
+
+ex2:
+	java -jar dist/Gossto.jar \
+	-calculationdata termwise \
+	-calculationtype ism \
+	-evidencecodes EXP,IDA,IPI,IMP,IGI,IEP,TAS,IC \
+	-goapath goa_human.gaf \
+	-obopath secretory.obo \
+	-hsm Resnik \
+	-hsmoutput secretory_hsm_output \
+	-ismoutput secretory_ism_output \
+	-ontology all \
+	-relations is_a \
+	-weightedJaccard false \
+	-terms all
+
+secretory.obo:
+	cp ../goatools/tests/data/secretory.obo .
 
 dnld:
 	rm -f go-basic.obo
@@ -57,7 +75,7 @@ main:
 #   Ant from: https://ant.apache.org/bindownload.cgi
 #   Ivy from: http://ant.apache.org/ivy/download.cgi
 jar:
-	~/ant/apache-ant-1.10.6/bin/ant jar
+	~/ant/apache-ant-1.10.6/bin/ant -verbose jar 
 
 clean:
 	rm -rf Gossto_with_data.zip Gossto.jar readme.pdf
