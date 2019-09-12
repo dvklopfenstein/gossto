@@ -93,7 +93,7 @@ public class SolutionPrinter {
             }
 
             out.newLine();
-            for (int i = 0; i < n; i++) {
+            for (int i = 0; i < 1; i++) {
                 out.write(rowIdentifiers[i]);
                 for (int j = 0; j < m; j++) {
                     //Checks the size of the similarity value, if smaller than 0.001 or greater than -0.001 then some validation needs to take place to print them properly 

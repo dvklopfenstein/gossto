@@ -129,7 +129,10 @@ public class HSMInterfacer {
 
     //Retrieves the HSM results, the parameter specifying whether we want to force it to return the gene simiarity results (only required fro printing)
     public Matrix returnTermWiseResults(int matrix) throws IOException {
+        int num_gos = chosenHSM.getNumGOTermsPerOntology(matrix);
+			  System.out.printf(">>>>>>>>>>>>>>> HSMInterfacer::returnTermWiseResults %d\n", num_gos);
         if (chosenHSM.getNumGOTermsPerOntology(matrix) == 0) {
+        //if (num_gos == 0) {
             // this case might happen if the organism has no annotation in that ontology
             return null;
         }

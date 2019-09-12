@@ -241,12 +241,14 @@ public class GOtreeInterfacer {
                     indexCC.put(term.getNumericId(), i);
                     i++;
                 }
+								//System.out.printf(" #################### GOtreeInterfacer::generate_AdjacencyMatrices %d\n", i);
 
                 //this.CCAdjacencyMatrix = new Adjacency(cc.size(), cc.size());
                 //set adjacencies' values ontology by ontology
                 logwriter.showMessage("Creating CC adjacency");
 
                 for (GOTerm term : this.ccAxisOrd) {
+										//System.out.printf(" #################### %s\n", term.getGOid());
                     for (String rel : GO_relations) {
                         for (GOTerm parent : term.getParentsForRelation(rel)) {
                             //int idx = findIndex(this.ccAxisOrd, parent);

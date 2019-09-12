@@ -83,6 +83,7 @@ public abstract class HSM {
         this.ontologyFromGOTerm = new HashMap<String, Integer>();
         this.goTermFromID = new HashMap<String, GOTerm>();
         for (GOTerm go : this.allTerms) {
+						//System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HSM");
             this.goTermFromID.put(go.getGOid(), go);
             if (go.getOntology().getName().equals("biological_process")) {
                 ontologyFromGOTerm.put(go.getGOid(), BIOLOGICAL_PROCESS);
@@ -95,6 +96,7 @@ public abstract class HSM {
                 numGOtermsPerOntology[CELLULAR_COMPONENT]++;
             }
         }
+				//System.out.printf("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HSM numGOtermsPerOntology %d\n", numGOtermsPerOntology[2]);
 
         this.maxAnnotationNumber = getMaxAnnotations();
 

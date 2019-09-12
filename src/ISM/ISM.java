@@ -177,7 +177,7 @@ public class ISM {
      */
     private GOtreeInterfacer importGOTree() throws FileNotFoundException, IOException, GeneOntologyException {
 
-        logger.showMessage("#####Importing GO & Annotation Data#####");
+        //logger.showMessage("#####Importing GO & Annotation Data#####");
         int propagationStrategy = 1; //Choice of propagation strategy, 1 as default, never changed.
         GOtreeInterfacer gti = new GOtreeInterfacer(this.oboFile, this.goaFile, this.chosenRelations, this.evidenceCodes, propagationStrategy, this.dagChoice, this.logger);
         logger.log("GOtree_Interfacer instantiated & executed");
@@ -266,6 +266,7 @@ public class ISM {
     public static void main(String[] args) {
         try {
 
+				    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ISM::main");
             //#####Proper Running of Program#####
             ISM ism = new ISM();
 
@@ -274,8 +275,11 @@ public class ISM {
 
             // 2.- the GO tree is imported and validated wrt annotation files
             GOtreeInterfacer gti = ism.importGOTree();
+				    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ISM::main importGOTree");
             GOTerm[][] matrixAxis = getMatrixAxis(gti);
+				    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ISM::main getMatrixAxis");
             ArrayList<GOTerm> goTerms = ism.validateGOTerms(matrixAxis);
+				    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ISM::main validateGOTerms");
 
             // 3.- the semantic similarities are computed and written to disk
             ism.computeAndWriteSemanticSimilarities(gti, matrixAxis, goTerms);
@@ -308,9 +312,11 @@ public class ISM {
         // program options
         // 2.- HSM computation       
         // 2.1.- Builds an HSM interfacer (to abstract the different HSMs)
+				System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ISM::computeAndWriteSemanticSimilarities");
         Object[] params = generateParameters(gti, matrixAxis);
         HSMInterfacer hsmi = buildsHSMInterfacer(params, new HashSet<GOTerm>(goIDsAsGOTerm), matrixAxis);
         hsmi.retrieveHSMinstance(this.hsmChoice, params);
+				System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ISM::computeAndWriteSemanticSimilarities hsmi.retrieveHSMinstance");
 
         // 2.2.- Iterate and make the whole process for every desired ontology
         int loopVars[] = this.setLoopVars(dagChoice, logger);
@@ -403,6 +409,7 @@ public class ISM {
             for (GOTerm go : matrixAxis[i]) {
                 allterms[counter] = go;
                 counter++;
+						    //System.out.printf(" ###################### generateParameters %d\n", i, counter);
             }
         }
         //set parameters for the HSMs

@@ -74,6 +74,7 @@ public class ISM_validImplementation {
     private final TinyLogger logger;
 
     public ISM_validImplementation(GOTerm[] ISM_currentGoTerms, Matrix HSM, String[] ISM_currentRelations, Assignment ISM_Annotations, boolean termwise, boolean wJaccard, TinyLogger logger) {
+				System.out.println("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG ISM_validImplementation::__init__");
         //0. Utils
 
         //0.1 various caches for speedup
@@ -87,9 +88,11 @@ public class ISM_validImplementation {
         //0.3 just some variables to keep useful data.
         this.relations = ISM_currentRelations;
         this.maxNumberOfAnnotations = this.getMaxOntology();
+				System.out.printf("MMMMMMMMMMMM this.maxNumberOfAnnotations %f\n", this.maxNumberOfAnnotations);
 
         //0.4 HSM
         this.HSM = HSM;
+				System.out.printf("HHHHHHHHHHHHHHHHHHHH HSM Matrix %d %d\n", HSM.getRowDimension(), HSM.getColumnDimension());
 
         //0.5.0 fire up the cache for the indices and load it up
         this.goTermIndex = new HashMap<Integer, Integer>();
@@ -185,6 +188,7 @@ public class ISM_validImplementation {
             if (this.leafs.contains(currentGoTerm.getNumericId())) {
                 int leafIndex = this.goTermIndex.get(currentGoTerm.getNumericId());
                 P.set(leafIndex, leafIndex, 1.0f);
+								//System.out.printf("PPPPPPPPPPPPPP ['%s', '%s', 1.0],\n", currentGoTerm.getGOid(), currentGoTerm.getGOid());
                 continue;
             }
         }
@@ -233,7 +237,9 @@ public class ISM_validImplementation {
         int N_u = 0;
         for (GOTerm currentChild : children) {
             N_u += this.getNumberOfAnnotations(currentChild);
+						//System.out.printf("UUUUUUUUUUUUUUUUUUUUUUUUU %s %s %d\n", currentGoTerm.getGOid(), currentChild.getGOid(), this.getNumberOfAnnotations(currentChild));
         }
+				//System.out.printf("UUUUUUUUUUUUUUUUUUUUUUUUU %s %d\n", currentGoTerm.getGOid(), N_u);
         //we need to use two loops. First we compute the total sum of 
         //annotations in the children, and the we modify the matrix P.
         //keep in mind that these nodes are allways non leaf nodes, therefore, B 
@@ -257,6 +263,7 @@ public class ISM_validImplementation {
             GOTerm currentChild = sortedChildren.get(currentChildId);
 
             int N_c = this.getNumberOfAnnotations(currentChild);
+						//System.out.printf("CCCCCCCCCCCCCCCCCCCCCCCCC %s %s %d\n", currentGoTerm.getGOid(), currentChild.getGOid(), N_c);
 
             //we check whether the annotations are in excess of zero. 
             //if the node does not have any annotations, then there is no need 
@@ -267,6 +274,8 @@ public class ISM_validImplementation {
                 float newEntry = A * (N_c * inv_N_u);
                 int v = this.goTermIndex.get(currentGoTerm.getNumericId());
                 int c = this.goTermIndex.get(currentChild.getNumericId());
+								//System.out.printf("PPPPPPPPPPPPPP ['%s', '%s', %f],\n", currentGoTerm.getGOid(), currentChild.getGOid(), newEntry);
+								//System.out.printf("ppppppppppppppppppppppppp %s %s %f %d %d %f\n", currentGoTerm.getGOid(), currentChild.getGOid(), A, N_u, N_c, newEntry);
                 P.set(c, v, newEntry);
             }
         }
@@ -308,24 +317,33 @@ public class ISM_validImplementation {
 
     private void setRandomWalkContributionTermwise(Matrix W) throws IOException {
 
-        this.logger.showTimedMessage("Submatrix (RWC)");
+				//System.out.printf("setRWCterm %d x %d RWC Start \n", this.RWC.getRowDimension(), this.RWC.getColumnDimension());
+        //this.logger.showTimedMessage("Submatrix (RWC)");
         this.RWC = W.getMatrix(this.leafIndices, this.allIndices);
-        this.logger.showTimedMessage("Transpose (RWC)");
+				System.out.printf("setRWCterm %d x %d RWC = W.getMatrix(leafIndices, allIndices)\n", this.RWC.getRowDimension(), this.RWC.getColumnDimension());
 
+        //this.logger.showTimedMessage("Transpose (RWC)");
         this.RWC = this.RWC.transpose();
-        this.logger.showTimedMessage("Submatrix (HSM)");
+				System.out.printf("setRWCterm %d x %d RWC.transpose()\n", this.RWC.getRowDimension(), this.RWC.getColumnDimension());
 
+        //this.logger.showTimedMessage("Submatrix (HSM)");
         Matrix subHSM = this.HSM.getMatrix(this.leafIndices, this.leafIndices);
-        this.logger.showTimedMessage("RWC * HSM");
+				System.out.printf("setRWCterm %d x %d subHSM = HSM.getMatrix(leafIndices, leafIndices)\n", subHSM.getRowDimension(), subHSM.getColumnDimension());
 
+        //this.logger.showTimedMessage("RWC * HSM");
         this.RWC = this.RWC.timesIKJ(subHSM);
-        this.logger.showTimedMessage("Submatrix (W)");
+				System.out.printf("setRWCterm %d x %d RWC = RWC.timesIKJ(subHSM)\n", this.RWC.getRowDimension(), this.RWC.getColumnDimension());
 
+        //this.logger.showTimedMessage("Submatrix (W)");
         Matrix subW = W.getMatrix(this.leafIndices, this.allIndices).copy();
-        this.logger.showTimedMessage("RWC * SubMatrixW");
+				System.out.printf("setRWCterm %d x %d subW = W.getMatrix(leafIndices, allIndices).copy()\n", subW.getRowDimension(), subW.getColumnDimension());
 
+        //this.logger.showTimedMessage("RWC * SubMatrixW");
         this.RWC = this.RWC.timesIKJ(subW);
-        this.logger.showTimedMessage("RWC set!");
+				System.out.printf("setRWCterm %d x %d this.RWC.timesIKJ(subW)\n", this.RWC.getRowDimension(), this.RWC.getColumnDimension());
+
+        //this.logger.showTimedMessage("RWC set!");
+				System.out.printf("setRWCterm %d x %d RWC set!\n", this.RWC.getRowDimension(), this.RWC.getColumnDimension());
     }
 
     private void setRandomWalkContributionGeneWise(Matrix W) throws IOException {

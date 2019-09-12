@@ -332,11 +332,15 @@ public class Matrix implements Cloneable, java.io.Serializable {
      */
     public Matrix getMatrix(int[] r, int[] c) {
         Matrix X = new Matrix(r.length, c.length);
+        //System.out.printf("Matrix(int[] r, int[] c) MMMMMMMMMMMMMMMMMMMMMMMMMMM Matrix(idxs) %d x %d\n", r.length, c.length);
         float[][] B = X.getArray();
         try {
             for (int i = 0; i < r.length; i++) {
                 for (int j = 0; j < c.length; j++) {
                     B[i][j] = A[r[i]][c[j]];
+                    // if (A[r[i]][c[j]] != 0) {
+                    //     System.out.printf("Matrix(int[] r, int[] c) %d %d %f\n", i, j, A[r[i]][c[j]]);
+									  // }
                 }
             }
         } catch (ArrayIndexOutOfBoundsException e) {

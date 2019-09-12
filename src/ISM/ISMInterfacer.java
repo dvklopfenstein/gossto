@@ -44,7 +44,7 @@ public class ISMInterfacer {
         if (HSM == null) {
             return null;
         } else {
-
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ISM_validImplementation::getISMs");
             ISM_validImplementation ism = new ISM_validImplementation(matrixAxis[matrix], HSM, GO_relations, annotations, true, false, logger);
             Matrix result = ism.computeISM();
 
@@ -64,6 +64,7 @@ public class ISMInterfacer {
         if (HSM == null) {
             return null;
         } else {
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ISM_validImplementation::getGeneISMs");
             ISM_validImplementation ism = new ISM_validImplementation(matrixAxis[matrix], HSM, GO_relations, annotations, false, weightedJaccard, logger);
             Matrix result = ism.computeISM();
 

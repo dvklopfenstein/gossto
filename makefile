@@ -1,4 +1,52 @@
 
+2a:
+	java -jar dist/Gossto.jar \
+	-calculationdata termwise \
+	-calculationtype ism \
+	-evidencecodes EXP,IDA,IPI,IMP,IGI,IEP,TAS,IC \
+	-goapath ../goatools/tests/data/yangRWC/fig2a.gaf \
+	-obopath ../goatools/tests/data/yangRWC/fig2a.obo \
+	-ontology cc \
+	-hsm Resnik \
+	-hsmoutput yang2a_hsm_output \
+	-ismoutput yang2a_ism_output \
+	-ontology all \
+	-relations is_a \
+	-weightedJaccard false \
+	-terms all
+
+1a:
+	java -jar dist/Gossto.jar \
+	-calculationdata termwise \
+	-calculationtype ism \
+	-evidencecodes EXP,IDA,IPI,IMP,IGI,IEP,TAS,IC \
+	-goapath ../goatools/tests/data/yangRWC/fig1a.gaf \
+	-obopath ../goatools/tests/data/yangRWC/fig1a.obo \
+	-ontology cc \
+	-hsm Resnik \
+	-hsmoutput yang1a_hsm_output \
+	-ismoutput yang1a_ism_output \
+	-ontology all \
+	-relations is_a \
+	-weightedJaccard false \
+	-terms all
+
+1b:
+	java -jar dist/Gossto.jar \
+	-calculationdata termwise \
+	-calculationtype ism \
+	-evidencecodes EXP,IDA,IPI,IMP,IGI,IEP,TAS,IC \
+	-goapath ../goatools/tests/data/yangRWC/fig1b.gaf \
+	-obopath ../goatools/tests/data/yangRWC/fig1b.obo \
+	-ontology cc \
+	-hsm Resnik \
+	-hsmoutput yang1b_hsm_output \
+	-ismoutput yang1b_ism_output \
+	-ontology all \
+	-relations is_a \
+	-weightedJaccard false \
+	-terms all
+
 example: gene_association.goa_yeast
 	java -jar dist/Gossto.jar \
 	-calculationdata termwise \
@@ -36,6 +84,7 @@ ex2:
 	-evidencecodes EXP,IDA,IPI,IMP,IGI,IEP,TAS,IC \
 	-goapath goa_human.gaf \
 	-obopath secretory.obo \
+	-ontology cc \
 	-hsm Resnik \
 	-hsmoutput secretory_hsm_output \
 	-ismoutput secretory_ism_output \
