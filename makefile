@@ -1,4 +1,20 @@
 
+2ag:
+	java -jar dist/Gossto.jar \
+	-calculationdata genewise \
+	-calculationtype ism \
+	-evidencecodes EXP,IDA,IPI,IMP,IGI,IEP,TAS,IC \
+	-goapath ../goatools/tests/data/yangRWC/fig2a.gaf \
+	-obopath ../goatools/tests/data/yangRWC/fig2a.obo \
+	-ontology cc \
+	-hsm Resnik \
+	-hsmoutput yang2a_hsm_output \
+	-ismoutput yang2a_ism_output \
+	-ontology all \
+	-relations is_a \
+	-weightedJaccard false \
+	-terms all
+
 2a:
 	java -jar dist/Gossto.jar \
 	-calculationdata termwise \

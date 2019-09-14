@@ -409,10 +409,12 @@ public class ISM_validImplementation {
     private Matrix getMatrixA() throws IOException {
 
         //Matrix A = new Matrix(this.getNumGoTerms(), this.annotations.sizeGenes());
+				System.out.printf("############################# Matrix A %d x %d\n", this.getNumGoTerms(), this.RWC.getColumnDimension());
         Matrix A = new Matrix(this.getNumGoTerms(), this.RWC.getColumnDimension());
         for (GOTerm currentGoTerm : this.subGoTerms) {
             //0. check for NStar value > 0, since this indicates there
             //is an annotation 
+						System.out.printf("\nMatrix A %s %d direct annotations\n", currentGoTerm.getGOid(), this.getNumberOfAnnotationsStar(currentGoTerm));
             if (this.getNumberOfAnnotationsStar(currentGoTerm) > 0) {
                 //0. Get all the genes annotating the current node
                 //this will hodl the difference of the parent set with the child set
@@ -436,6 +438,7 @@ public class ISM_validImplementation {
                     //this is a tricky one. We are not sure what "directly" means in the paper.
                     //but it should not be a very complicated problem to solve.
                     int count = this.annotations.getGOTermScoresForProteinId(uniqueAnnotation).keySet().size();
+										System.out.printf("############################# Matrix A %s uniqueAnnotation=%s %d\n", currentGoTerm.getGOid(), uniqueAnnotation, count);
                     //0. get the protein id.
                     A.set(this.goTermIndex.get(currentGoTerm.getNumericId()), this.proteinIndices.get(uniqueAnnotation), 1.0f / count);
                 }
