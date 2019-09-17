@@ -312,11 +312,11 @@ public class ISM {
         // program options
         // 2.- HSM computation       
         // 2.1.- Builds an HSM interfacer (to abstract the different HSMs)
-				System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ISM::computeAndWriteSemanticSimilarities");
+				System.out.println("############################### ISM::computeAndWriteSemanticSimilarities");
         Object[] params = generateParameters(gti, matrixAxis);
         HSMInterfacer hsmi = buildsHSMInterfacer(params, new HashSet<GOTerm>(goIDsAsGOTerm), matrixAxis);
         hsmi.retrieveHSMinstance(this.hsmChoice, params);
-				System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ISM::computeAndWriteSemanticSimilarities hsmi.retrieveHSMinstance");
+				System.out.println("############################### ISM::computeAndWriteSemanticSimilarities hsmi.retrieveHSMinstance");
 
         // 2.2.- Iterate and make the whole process for every desired ontology
         int loopVars[] = this.setLoopVars(dagChoice, logger);
@@ -341,6 +341,7 @@ public class ISM {
                 }
             }
             logger.log("HSM calculated");
+						System.out.printf("################## Matrix HMS %d x %d\n", hsmResults.getRowDimension(), hsmResults.getColumnDimension());
             logger.showMemoryUsage();
 
             // (b) we print the results of the HSM to a file...            

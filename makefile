@@ -1,10 +1,11 @@
 
-2ag:
+# genewise with jaccard index NOT using info_cnt
+2ag0:
 	java -jar dist/Gossto.jar \
 	-calculationdata genewise \
 	-calculationtype ism \
 	-evidencecodes EXP,IDA,IPI,IMP,IGI,IEP,TAS,IC \
-	-goapath ../goatools/tests/data/yangRWC/fig2a.gaf \
+	-goapath ../goatools/tests/data/yangRWC/fig2a_small.gaf \
 	-obopath ../goatools/tests/data/yangRWC/fig2a.obo \
 	-ontology cc \
 	-hsm Resnik \
@@ -15,6 +16,24 @@
 	-weightedJaccard false \
 	-terms all
 
+# genewise with jaccard index using info_cnt
+2ag1:
+	java -jar dist/Gossto.jar \
+	-calculationdata genewise \
+	-calculationtype ism \
+	-evidencecodes EXP,IDA,IPI,IMP,IGI,IEP,TAS,IC \
+	-goapath ../goatools/tests/data/yangRWC/fig2a_small.gaf \
+	-obopath ../goatools/tests/data/yangRWC/fig2a.obo \
+	-ontology cc \
+	-hsm Resnik \
+	-hsmoutput yang2a_hsm_output \
+	-ismoutput yang2a_ism_output \
+	-ontology all \
+	-relations is_a \
+	-weightedJaccard true \
+	-terms all
+
+# termwise
 2a:
 	java -jar dist/Gossto.jar \
 	-calculationdata termwise \

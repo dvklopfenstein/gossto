@@ -66,6 +66,7 @@ public class SolutionPrinter {
         //printing the matrices value by value
         final int n = matrix.getRowDimension();
         final int m = matrix.getColumnDimension();
+				//System.out.printf("PRINTING Matrix %d x %d\n", n, m);
         if (n == 1) {
             logger.showMessage("  ERROR: the specified user restrictions leaves a 1x1 matrix,");
             logger.showMessage("  which will not be printed.");
@@ -93,15 +94,18 @@ public class SolutionPrinter {
             }
 
             out.newLine();
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < n; i++) {
+								//System.out.printf("ROW %d: ", i);
                 out.write(rowIdentifiers[i]);
                 for (int j = 0; j < m; j++) {
                     //Checks the size of the similarity value, if smaller than 0.001 or greater than -0.001 then some validation needs to take place to print them properly 
                     //double checkVal = matrix.getEntry(i, j);
                     //String outputFormat = this.myFormat(checkVal);
+										//System.out.printf("%5.3f ", matrix.get(i, j));
                     out.write("\t");
                     out.write("" + matrix.get(i, j));
                 }
+								//System.out.println("");
 
                 out.newLine();
             }

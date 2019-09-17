@@ -352,10 +352,15 @@ public class ISM_validImplementation {
         Matrix A = this.getMatrixA();
         //1. multiply both matrices.
         this.logger.showTimedMessage("Getting matrix B");
+				System.out.printf("############################# Matrix A   %d x %d\n", this.getNumGoTerms(), this.RWC.getColumnDimension());
+				System.out.printf("############################# Matrix W   %d x %d\n", W.getRowDimension(), W.getColumnDimension());
         SparseMatrix W_ = W.getSparseMatrix(this.leafIndices, this.allIndices);
+				System.out.printf("############################# Matrix W_  %d x %d\n", W_.getRowDimension(), W_.getColumnDimension());
         this.logger.showMessage("Matrix W_ computed. % of sparseness = " + W_.getSparsenessPercentage());
         Matrix B = W_.times(A); // TODO: optimize this, A is always very sparse
+				System.out.printf("############################# Matrix B   %d x %d\n", B.getRowDimension(), B.getColumnDimension());
         this.logger.showMessage("Matrix B computed. % of sparseness = " + B.getSparsenessPercentage());
+				System.out.printf("############################# Matrix RWC %d x %d\n", this.RWC.getRowDimension(), this.RWC.getColumnDimension());
 
         //2. calculate the RWC
         //2.0 traverse all the products.
@@ -363,6 +368,7 @@ public class ISM_validImplementation {
         //for RWC column_index  == row_index
         this.logger.showTimedMessage("Computing RWC matrix as succesive Jaccard indexes");
         final int N = this.RWC.getRowDimension(), M = this.RWC.getColumnDimension();
+				System.out.printf("N=%d M=%d\n", N, M);
 
         if (this.weightedJaccard) {
             this.logger.showTimedMessage("Jaccard index, _with_ IC");
@@ -373,6 +379,7 @@ public class ISM_validImplementation {
             for (int i = 0; i < this.leafIndices.length; i++) {
                 //we need to fetch  the information content of the nodes if we use weighted jaccard.
                 IC[i] = (float) -Math.log(this.numAnnotations.get(this.gotermIdByIndex.get(this.leafIndices[i])) * invMaxAnnot);
+                //System.out.printf("INFO FOR LEAVES: %f\n", (float) -Math.log(this.numAnnotations.get(this.gotermIdByIndex.get(this.leafIndices[i])) * invMaxAnnot));
             }
 
             for (int i = 0; i < N; i++) {
@@ -391,25 +398,29 @@ public class ISM_validImplementation {
                 for (float val : B.getColumn(i)) {
                     sum += val;
                 }
+								//System.out.printf("sum distributin on gene's leaves: i=%d sum=%f\n", i, sum);
                 sums[i] = sum;
             }
 
             for (int i = 0; i < N; i++) {
                 float column_i[] = B.getColumn(i);
+                //System.out.printf("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC", i, column_i);
                 for (int j = i; j < M; j++) {
                     float jaccardIndex = this.getJaccardIndexWithoutIC(column_i, B.getColumn(j), sums[i], sums[j]);
+										//System.out.printf("jaccardIndex %d %d = %f\n", i, j, jaccardIndex);
                     this.RWC.set(i, j, jaccardIndex);
                     this.RWC.set(j, i, jaccardIndex);
                 }
             }
         }
+				this.RWC.print(10, 3);
+				System.out.printf("############################# Matrix RWC %d x %d\n", this.RWC.getRowDimension(), this.RWC.getColumnDimension());
         this.logger.showTimedMessage("RWC set!");
     }
 
     private Matrix getMatrixA() throws IOException {
 
         //Matrix A = new Matrix(this.getNumGoTerms(), this.annotations.sizeGenes());
-				System.out.printf("############################# Matrix A %d x %d\n", this.getNumGoTerms(), this.RWC.getColumnDimension());
         Matrix A = new Matrix(this.getNumGoTerms(), this.RWC.getColumnDimension());
         for (GOTerm currentGoTerm : this.subGoTerms) {
             //0. check for NStar value > 0, since this indicates there
@@ -458,8 +469,10 @@ public class ISM_validImplementation {
             combinedSum += distributionProductOne[i] * distributionProductTwo[i];
             //sumProductOne += distributionProductOne[i];
             //sumProductTwo += distributionProductTwo[i];
+				    //System.out.printf("%d combinedSum(%f) = distributionProductOne(%f) * distributionProductTwo(%f)\n", i, combinedSum, distributionProductOne[i], distributionProductTwo[i]);
         }
         //1. compute the jaccard index
+				//System.out.printf("combinedSum(%f)\n", combinedSum);
         return (combinedSum / (sumProductOne + sumProductTwo - combinedSum));
     }
 
@@ -481,6 +494,8 @@ public class ISM_validImplementation {
     }
 
     private Matrix getISM() {
+				System.out.printf("HSM %d x %d\n", this.HSM.getRowDimension(), this.HSM.getColumnDimension());
+				System.out.printf("RWC %d x %d\n", this.RWC.getRowDimension(), this.RWC.getColumnDimension());
         return (this.HSM.plus(RWC)).times(0.5f);
     }
 
