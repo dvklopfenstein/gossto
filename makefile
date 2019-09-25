@@ -2,15 +2,15 @@
 # genewise with jaccard index NOT using info_cnt
 2ag0:
 	java -jar dist/Gossto.jar \
-	-calculationdata genewise \
+	-calculationdata termwise \
 	-calculationtype ism \
 	-evidencecodes EXP,IDA,IPI,IMP,IGI,IEP,TAS,IC \
 	-goapath ../goatools/tests/data/yangRWC/fig2a_small.gaf \
 	-obopath ../goatools/tests/data/yangRWC/fig2a.obo \
 	-ontology cc \
 	-hsm Resnik \
-	-hsmoutput yang2a_hsm_output \
-	-ismoutput yang2a_ism_output \
+	-hsmoutput 2ag0_hsm_output \
+	-ismoutput 2ag0_ism_output \
 	-ontology all \
 	-relations is_a \
 	-weightedJaccard false \
@@ -26,8 +26,8 @@
 	-obopath ../goatools/tests/data/yangRWC/fig2a.obo \
 	-ontology cc \
 	-hsm Resnik \
-	-hsmoutput yang2a_hsm_output \
-	-ismoutput yang2a_ism_output \
+	-hsmoutput 2ag1_hsm_output \
+	-ismoutput 2ag1_ism_output \
 	-ontology all \
 	-relations is_a \
 	-weightedJaccard true \

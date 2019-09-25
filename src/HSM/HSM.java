@@ -72,6 +72,9 @@ public abstract class HSM {
         this.annotations = annotations;
         this.logwriter = logw;
         this.relations = relations;
+				System.out.printf("HSM: %d genes\n", this.genes.length);
+				System.out.printf("HSM: %d goIdsByGene\n", this.goIdsByGene.length);
+				System.out.printf("HSM: %d allTerms\n", this.allTerms.length);
 
         if (targets != null) {
             stripDownGeneData(targets);
@@ -364,14 +367,13 @@ public abstract class HSM {
             }
         }
 
-        /*
-         int k = 0;
-         for (int i = 0; i < m; ++i) {
-         if (dominates.get(i).size() > 10) {
-         ++k;
-         System.err.println("Row " + i + " dominates " + dominates.get(i).size());
-         }
-         } */
+        //int k = 0;
+        //for (int i = 0; i < m; ++i) {
+        //    //if (dominates.get(i).size() > 10) {
+        //        ++k;
+        //        System.err.println("Row " + i + " dominates " + dominates.get(i).size());
+        //    //}
+        //}
         return dominates;
     }
 
