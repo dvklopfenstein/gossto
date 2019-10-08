@@ -1,3 +1,5 @@
+find:
+	find . -name \*.java
 
 # genewise with jaccard index NOT using info_cnt
 2ag0:
@@ -30,7 +32,7 @@
 	-ismoutput 2ag1_ism_output \
 	-ontology all \
 	-relations is_a \
-	-weightedJaccard true \
+	-weightedJaccard false \
 	-terms all
 
 # termwise
