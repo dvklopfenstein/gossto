@@ -1,3 +1,27 @@
+# Generate expected data for:
+#   tests/test_yang_hsm_termwise.py
+#   tests/test_yang_ism_termwise.py
+
+PHONY: all
+PHONY: faa2a_nonleaf0_Resnik
+PHONY: fig2a_nonleaf0_Resnik
+PHONY: fig2a_small_Resnik
+PHONY: faa2a_nonleaf0_Lin
+PHONY: fig2a_nonleaf0_Lin
+PHONY: fig2a_small_Lin
+PHONY: fig1a_Resnik
+PHONY: fig1a_Lin
+PHONY: fig1a_Jiang
+PHONY: fig1a_simGraSM
+PHONY: fig1b_Resnik
+PHONY: fig1b_Lin
+PHONY: fig1b_Jiang
+PHONY: fig1b_simGraSM
+PHONY: fig2a_Resnik
+PHONY: fig2a_Lin
+PHONY: fig2a_Jiang
+PHONY: fig2a_simGraSM
+
 all:
 	make -f yang_termwise.mk fig1a_Resnik
 	make -f yang_termwise.mk fig1b_Resnik
