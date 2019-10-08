@@ -23,9 +23,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.Collections;
 import util.TinyLogger;
 
 /**
@@ -52,6 +54,8 @@ public class ISM_validImplementation {
     private final int[] allIndices; //just to store them. We will definitely need them
     private final int[] leafIndices; //again, we will definitely use them
     private final Map<Integer, Integer> gotermIdByIndex;
+		private Set<String> proteinsSet;
+		private String[] proteinsList;
     private HashMap<String, Integer> proteinIndices; //to store the protein indices for genewise calculations
     private final double maxNumberOfAnnotations; //an integer to store the maximnun number of annotations of any node in the tree
     /*ISM elements*/
@@ -120,19 +124,36 @@ public class ISM_validImplementation {
         //we load the indices for the annotations only in the case
         //were we compute the genewise similarity
         if (!this.termwise) {
-            //this is just to index all the annotations.
-            this.proteinIndices = new HashMap<String, Integer>();
+
+            // ORIGINAL: this is just to index all the annotations.
+            ////this.proteinIndices = new HashMap<String, Integer>();
+            ////for (GOTerm term : this.subGoTerms) {
+            ////    Set<String> proteinsInGoTerm = this.annotations.getProteinsForGOTerm(term.getGOid());
+            ////    int proteinIndex;
+            ////    //the protein already exists in the list.
+            ////    for (String protein : proteinsInGoTerm) {
+            ////        if (!proteinIndices.containsKey(protein)) {
+            ////            proteinIndex = this.proteinIndices.size();
+            ////            this.proteinIndices.put(protein, proteinIndex);
+            ////        }
+            ////    }
+            ////}
+
+            //// TO MATCH PYTHON: this is just to index all the annotations.
+            this.proteinsSet = new HashSet<String>();
             for (GOTerm term : this.subGoTerms) {
                 Set<String> proteinsInGoTerm = this.annotations.getProteinsForGOTerm(term.getGOid());
-                int proteinIndex;
-                //the protein already exists in the list.
-                for (String protein : proteinsInGoTerm) {
-                    if (!proteinIndices.containsKey(protein)) {
-                        proteinIndex = this.proteinIndices.size();
-                        this.proteinIndices.put(protein, proteinIndex);
-                    }
-                }
+                this.proteinsSet.addAll(proteinsInGoTerm);
             }
+						ArrayList<String> proteinsList = new ArrayList<String>(this.proteinsSet);
+            int proteinIndex;
+						Collections.sort(proteinsList);
+						this.proteinIndices = new HashMap<String, Integer>();
+						for (String protein : proteinsList) {
+                proteinIndex = this.proteinIndices.size();
+                this.proteinIndices.put(protein, proteinIndex);
+						}
+
         }
 
         //0.8 RWC
@@ -158,6 +179,7 @@ public class ISM_validImplementation {
         //Step 1. Walk!
         this.logger.showTimedMessage("Walking...");
         Matrix W = walk();
+				//W.print(10, 6);  // Print WALK matrix
 
         logger.showMemoryUsage();
 
@@ -286,6 +308,7 @@ public class ISM_validImplementation {
         //Step 0. Initialise transition probabilities
         this.logger.showTimedMessage("Initialise transition probabilities");
         Matrix P = this.initialiseTransitionProbabilities();
+				P.print(10, 6);
 
         logger.showMemoryUsage();
 
@@ -353,13 +376,19 @@ public class ISM_validImplementation {
         //1. multiply both matrices.
         this.logger.showTimedMessage("Getting matrix B");
 				System.out.printf("############################# Matrix A   %d x %d\n", this.getNumGoTerms(), this.RWC.getColumnDimension());
+				//A.print(10, 5);
+
 				System.out.printf("############################# Matrix W   %d x %d\n", W.getRowDimension(), W.getColumnDimension());
         SparseMatrix W_ = W.getSparseMatrix(this.leafIndices, this.allIndices);
 				System.out.printf("############################# Matrix W_  %d x %d\n", W_.getRowDimension(), W_.getColumnDimension());
         this.logger.showMessage("Matrix W_ computed. % of sparseness = " + W_.getSparsenessPercentage());
+				//W_.print(10, 5);
+
         Matrix B = W_.times(A); // TODO: optimize this, A is always very sparse
 				System.out.printf("############################# Matrix B   %d x %d\n", B.getRowDimension(), B.getColumnDimension());
         this.logger.showMessage("Matrix B computed. % of sparseness = " + B.getSparsenessPercentage());
+				//B.print(10,5);
+
 				System.out.printf("############################# Matrix RWC %d x %d\n", this.RWC.getRowDimension(), this.RWC.getColumnDimension());
 
         //2. calculate the RWC
@@ -378,8 +407,8 @@ public class ISM_validImplementation {
             float IC[] = new float[this.leafIndices.length];
             for (int i = 0; i < this.leafIndices.length; i++) {
                 //we need to fetch  the information content of the nodes if we use weighted jaccard.
-                IC[i] = (float) -Math.log(this.numAnnotations.get(this.gotermIdByIndex.get(this.leafIndices[i])) * invMaxAnnot);
-                //System.out.printf("INFO FOR LEAVES: %f\n", (float) -Math.log(this.numAnnotations.get(this.gotermIdByIndex.get(this.leafIndices[i])) * invMaxAnnot));
+                IC[i] = (float) -Math.log10(this.numAnnotations.get(this.gotermIdByIndex.get(this.leafIndices[i])) * invMaxAnnot);
+                //System.out.printf("INFO FOR LEAVES: %f\n", (float) -Math.log10(this.numAnnotations.get(this.gotermIdByIndex.get(this.leafIndices[i])) * invMaxAnnot));
             }
 
             for (int i = 0; i < N; i++) {
@@ -413,7 +442,7 @@ public class ISM_validImplementation {
                 }
             }
         }
-				this.RWC.print(10, 3);
+				//this.RWC.print(10, 3);
 				System.out.printf("############################# Matrix RWC %d x %d\n", this.RWC.getRowDimension(), this.RWC.getColumnDimension());
         this.logger.showTimedMessage("RWC set!");
     }
@@ -441,7 +470,7 @@ public class ISM_validImplementation {
                 for (GOTerm currentChild : children) {
                     childrenAnnotations.addAll(this.annotations.getProteinsForGOTerm(currentChild.getGOid()));
                 }
-                //2. Traverse the difference and count the number of terms annotating this et of genes.
+                //2. Traverse the difference and count the number of terms annotating this set of genes.
                 //2.0 obtain the difference between the two nodes. that is, the annotations
                 //that are unique to the current node..
                 uniqueAnnotations.removeAll(childrenAnnotations);
@@ -449,7 +478,7 @@ public class ISM_validImplementation {
                     //this is a tricky one. We are not sure what "directly" means in the paper.
                     //but it should not be a very complicated problem to solve.
                     int count = this.annotations.getGOTermScoresForProteinId(uniqueAnnotation).keySet().size();
-										System.out.printf("############################# Matrix A %s uniqueAnnotation=%s %d\n", currentGoTerm.getGOid(), uniqueAnnotation, count);
+										System.out.printf("####################### Matrix A %s uniqueAnnotation %s[%d] count=%d\n", currentGoTerm.getGOid(), uniqueAnnotation, this.proteinIndices.get(uniqueAnnotation), count);
                     //0. get the protein id.
                     A.set(this.goTermIndex.get(currentGoTerm.getNumericId()), this.proteinIndices.get(uniqueAnnotation), 1.0f / count);
                 }
