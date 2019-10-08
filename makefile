@@ -1,6 +1,10 @@
 find:
 	find . -name \*.java
 
+2ag:
+	make 2ag0 2ag1j0 2ag1j1
+	cp -f 2ag*_?sm_output_CC.txt ../goatools_alpha/tests/data/yangRWC
+
 # genewise with jaccard index NOT using info_cnt
 2ag0:
 	java -jar dist/Gossto.jar \
@@ -18,8 +22,8 @@ find:
 	-weightedJaccard false \
 	-terms all
 
-# genewise with jaccard index using info_cnt
-2ag1:
+# genewise without weighted jaccard index using info_cnt
+2ag1j0:
 	java -jar dist/Gossto.jar \
 	-calculationdata genewise \
 	-calculationtype ism \
@@ -28,11 +32,28 @@ find:
 	-obopath ../goatools/tests/data/yangRWC/fig2a.obo \
 	-ontology cc \
 	-hsm Resnik \
-	-hsmoutput 2ag1_hsm_output \
-	-ismoutput 2ag1_ism_output \
+	-hsmoutput 2ag1j0_hsm_output \
+	-ismoutput 2ag1j0_ism_output \
 	-ontology all \
 	-relations is_a \
 	-weightedJaccard false \
+	-terms all
+
+# genewise without weighted jaccard index using info_cnt
+2ag1j1:
+	java -jar dist/Gossto.jar \
+	-calculationdata genewise \
+	-calculationtype ism \
+	-evidencecodes EXP,IDA,IPI,IMP,IGI,IEP,TAS,IC \
+	-goapath ../goatools/tests/data/yangRWC/fig2a_small.gaf \
+	-obopath ../goatools/tests/data/yangRWC/fig2a.obo \
+	-ontology cc \
+	-hsm Resnik \
+	-hsmoutput 2ag1j1_hsm_output \
+	-ismoutput 2ag1j1_ism_output \
+	-ontology all \
+	-relations is_a \
+	-weightedJaccard true \
 	-terms all
 
 # termwise
