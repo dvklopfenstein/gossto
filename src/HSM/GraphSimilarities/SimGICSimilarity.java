@@ -63,6 +63,6 @@ public class SimGICSimilarity extends GraphSimilarity {
 
     private float getInformationContent(GOTerm term) {
         double annot = this.annotations.countNumberOfGenesForGOTerm(term.getGOid());
-        return (float)(- Math.log10(annot / this.maxAnnot));
+        return (float)(- Math.log(annot / this.maxAnnot));
     }
 }

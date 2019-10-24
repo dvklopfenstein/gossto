@@ -407,8 +407,8 @@ public class ISM_validImplementation {
             float IC[] = new float[this.leafIndices.length];
             for (int i = 0; i < this.leafIndices.length; i++) {
                 //we need to fetch  the information content of the nodes if we use weighted jaccard.
-                IC[i] = (float) -Math.log10(this.numAnnotations.get(this.gotermIdByIndex.get(this.leafIndices[i])) * invMaxAnnot);
-                //System.out.printf("INFO FOR LEAVES: %f\n", (float) -Math.log10(this.numAnnotations.get(this.gotermIdByIndex.get(this.leafIndices[i])) * invMaxAnnot));
+                IC[i] = (float) -Math.log(this.numAnnotations.get(this.gotermIdByIndex.get(this.leafIndices[i])) * invMaxAnnot);
+                //System.out.printf("INFO FOR LEAVES: %f\n", (float) -Math.log(this.numAnnotations.get(this.gotermIdByIndex.get(this.leafIndices[i])) * invMaxAnnot));
             }
 
             for (int i = 0; i < N; i++) {
